@@ -1,0 +1,18 @@
+
+ .w-full textarea {
+    width: 400px;
+    height: 400px;
+    resize: none;
+    margin: 10px;
+    font-size: 23px;
+    color: wheat;
+    background-image: linear-gradient(to bottom, rgba(133, 127, 127, 0.34), rgba(63, 58, 56, 0));
+    padding: 30px;
+}
+
+
+
+
+
+
+
