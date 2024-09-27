@@ -259,6 +259,16 @@
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                    placeholder="Correo Electrónico" required="">
                         </div>
+
+                        <div>
+                            <label for="idRolUp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
+                            <select name="edad" aria-label="Default select example" id="idRolUp" th:field="*{rol}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option th:each="rol : ${T(com.cut.cardona.modelo.voluntarios.Rol).values()}"
+                                        th:value="${rol.name()}" th:text="${rol.label}">
+                                </option>
+                            </select>
+                        </div>
                         <div class="w-full">
                             <label for="casaPuenteUp" id="casaPuenteUp"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Casa
@@ -277,15 +287,6 @@
                                 <label for="casaPuenteUp-no"
                                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
                             </div>
-                        </div>
-                        <div>
-                            <label for="idRolUp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                            <select name="edad" aria-label="Default select example" id="idRolUp" th:field="*{rol}"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option th:each="rol : ${T(com.cut.cardona.modelo.voluntarios.Rol).values()}"
-                                        th:value="${rol.name()}" th:text="${rol.label}">
-                                </option>
-                            </select>
                         </div>
                     </div>
                     <input type="hidden" id="voluntarioIdInput" name="voluntarioId"/>
