@@ -1,5 +1,5 @@
 package com.cut.cardona.security;
-import com.cut.cardona.modelo.Usuarios.UsuarioRepositorio;
+import com.cut.cardona.modelo.Usuarios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 public class AutenticationService implements UserDetailsService {
 
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private RepositorioUsuario repositorioUsuario;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioRepositorio.findByUserNameAndEmail(username, username);
+        return repositorioUsuario.findByUserNameOrEmail(username, username);
     }
 }

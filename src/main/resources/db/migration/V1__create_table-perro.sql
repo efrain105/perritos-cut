@@ -1,4 +1,4 @@
-CREATE TABLE perro
+CREATE TABLE IF NOT EXISTS perro
 (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre         VARCHAR(100) NOT NULL,

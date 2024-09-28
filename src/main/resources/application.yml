@@ -6,6 +6,8 @@ spring:
     password: ${DB_PASSWORD}
     hikari:
       username: ${DB_USER_NAME}
+  flyway:
+    enabled: true
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -13,7 +15,7 @@ spring:
     hibernate:
       ddl-auto: update
 
-  api:
-        security:
-          secret: ${JWT_SECRET:123456}
+api:
+  security:
+    secret: ${JWT_SECRET}
 

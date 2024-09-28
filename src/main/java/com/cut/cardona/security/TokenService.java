@@ -17,7 +17,7 @@ import java.time.ZoneId;
 @Service
 public class TokenService {
 
-    @Value("${api.security.secret}")
+    @Value("${JWT_SECRET}")
     private String apiSecret;
 
     public String generarToken(Usuario usuario) {
@@ -27,7 +27,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("perritos_cut")
                     .withSubject(usuario.getUsername())
-                    .withClaim("roles", usuario.getRol().toString())
+                    .withClaim("roles", usuario.getRoles().toString())
                     .withClaim("id", usuario.getId())
                     .withExpiresAt(generarFechaDeExpiacion())
                     .sign(algorithm);

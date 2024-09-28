@@ -40,38 +40,38 @@ public class PerroController {
 
     //variable para mostrar los perros, se le pasa el query, page y size
     @ModelAttribute("perros")
-public String mostrarPerros(@RequestParam(value = "query", required = false) String query,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "6") int size,
-                            Model model) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Perro> perrosPage;
+    public String mostrarPerros(@RequestParam(value = "query", required = false) String query,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "6") int size,
+                                Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Perro> perrosPage;
 
-    if (query != null && !query.isEmpty()) {
-        Specification<Perro> perroSpecification = Specification.where(PerrosSpecifications.nombreContains(query))
-                .or(PerrosSpecifications.razaContains(query))
-                .or(PerrosSpecifications.colorContains(query));
-        try {
-            Integer edad = Integer.valueOf(query);
-            perroSpecification = perroSpecification.or(PerrosSpecifications.edadIs(edad));
-        } catch (NumberFormatException e) {
-            // Ignore, as the query is not a valid integer
+        if (query != null && !query.isEmpty()) {
+            Specification<Perro> perroSpecification = Specification.where(PerrosSpecifications.nombreContains(query))
+                    .or(PerrosSpecifications.razaContains(query))
+                    .or(PerrosSpecifications.colorContains(query));
+            try {
+                Integer edad = Integer.valueOf(query);
+                perroSpecification = perroSpecification.or(PerrosSpecifications.edadIs(edad));
+            } catch (NumberFormatException e) {
+                // Ignore, as the query is not a valid integer
+            }
+
+            perrosPage = repositorioPerro.findAll(perroSpecification, pageable);
+        } else {
+            perrosPage = repositorioPerro.findAll(pageable);
         }
 
-        perrosPage = repositorioPerro.findAll(perroSpecification, pageable);
-    } else {
-        perrosPage = repositorioPerro.findAll(pageable);
+        model.addAttribute("currentPagePerros", page);
+        model.addAttribute("totalPagesPerros", perrosPage.getTotalPages());
+        model.addAttribute("totalItemsPerros", perrosPage.getTotalElements());
+        model.addAttribute("perrosPage", perrosPage);
+        model.addAttribute("sizePerros", perrosPage.getSize());
+        model.addAttribute("perros", perrosPage.getContent().stream().map(DatosMostrarPerros::new).toList());
+
+        return "perros";
     }
-
-    model.addAttribute("currentPagePerros", page);
-    model.addAttribute("totalPagesPerros", perrosPage.getTotalPages());
-    model.addAttribute("totalItemsPerros", perrosPage.getTotalElements());
-    model.addAttribute("perrosPage", perrosPage);
-    model.addAttribute("sizePerros", perrosPage.getSize());
-    model.addAttribute("perros", perrosPage.getContent().stream().map(DatosMostrarPerros::new).toList());
-
-    return "perros";
-}
 
     //Metodo post para guardar un perro
     @PostMapping("/perros")
@@ -87,8 +87,7 @@ public String mostrarPerros(@RequestParam(value = "query", required = false) Str
             String errorMessage = "No se ha podido guardar el perrito, por favor intente de nuevo";
             redirectAttributes.addFlashAttribute("error", errorMessage);
             return "redirect:/crear-perro";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             String errorMessage = "A ocurrido un error, por favor intente de nuevo";
             redirectAttributes.addFlashAttribute("error", errorMessage);
             return "redirect:/crear-perro";

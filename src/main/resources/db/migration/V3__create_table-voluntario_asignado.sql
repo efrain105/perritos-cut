@@ -1,4 +1,4 @@
-CREATE TABLE voluntario_asignado
+CREATE TABLE IF NOT EXISTS voluntario_asignado
 (
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     activo        BOOLEAN,

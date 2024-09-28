@@ -1,4 +1,4 @@
-CREATE TABLE voluntario
+CREATE TABLE IF NOT EXISTS voluntario
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(255),

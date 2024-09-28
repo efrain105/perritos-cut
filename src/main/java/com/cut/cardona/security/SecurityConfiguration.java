@@ -25,40 +25,24 @@ import java.util.Arrays;
 public class SecurityConfiguration {
 
     @Autowired
-    private SecurityFilter securityFilter;
+    private SecurityFilter securityFilter; // Tu filtro de JWT
 
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// le indicamos a spring el tipo de sesion
-                .and().authorizeHttpRequests()
-                .requestMatchers("/login").permitAll()
-                .requestMatchers(HttpMethod.POST).permitAll()
-                .requestMatchers(HttpMethod.GET).permitAll()
-                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated()
-                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).cors(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-                .build();
-    }
-
-    /*
-    * @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/public").permitAll() // Rutas públicas
-            .antMatchers("/user/**").hasRole("USER") // Rutas accesibles solo para usuarios con el rol "USER"
-            .antMatchers("/admin/**").hasRole("ADMIN") // Rutas accesibles solo para usuarios con el rol "ADMIN"
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity.csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configuración sin estado
+            .and().authorizeHttpRequests()
+            .requestMatchers("/login").permitAll()
+            .requestMatchers(HttpMethod.POST).permitAll()
+            .requestMatchers(HttpMethod.GET).permitAll()
+            .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+            .requestMatchers("/admin/**").hasRole("ADMIN") // Solo ADMIN
+            .requestMatchers("/user/**").hasRole("USER")   // Solo USER
             .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
-            .and()
-            .formLogin()
-            .loginPage("/login") // Página de inicio de sesión personalizada
-            .permitAll()
-            .and()
-            .logout()
-            .permitAll();
-    }
-}*/
+            .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+            .cors(Customizer.withDefaults())
+            .build();
+}
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -68,21 +52,27 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-
+    }    //Configuracion para api
+/*
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:63343"); // Permitir acceso desde este origen
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Métodos permitidos
-        configuration.addAllowedHeader("*"); // Permitir todos los encabezados
-        configuration.setAllowCredentials(true); // Permitir credenciales (por si es necesario)
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf().disable() // Desactiva CSRF para API
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin estado para JWT
+                .and()
+                .authorizeHttpRequests()
+                // Rutas de API
+                .requestMatchers("/api/login").permitAll() // Permitir acceso a login de API
+                .requestMatchers("/api/**").authenticated() // Rutas de API requieren autenticación
+                // Rutas de Swagger
+                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                // Rutas de MVC
+                .requestMatchers("/", "/home", "/about").permitAll() // Permitir acceso a páginas de inicio
+                .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
+                .and()
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Agrega tu filtro
+                .cors(Customizer.withDefaults()); // Configura CORS según sea necesario
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-
-        return source;
-    }
-
+        return httpSecurity.build();
+    }*/
 }

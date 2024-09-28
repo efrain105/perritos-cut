@@ -1,7 +1,7 @@
 package com.cut.cardona.security;
 
 
-import com.cut.cardona.modelo.Usuarios.UsuarioRepositorio;
+import com.cut.cardona.modelo.Usuarios.RepositorioUsuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private RepositorioUsuario repositorioUsuario;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             String token = authHeader.replace("Bearer ", "");
             String subject = tokenService.getSubject(token);
             if (subject != null){
-                UserDetails usuario = usuarioRepositorio.findByUserNameAndEmail(subject, subject);
+                UserDetails usuario = repositorioUsuario.findByUserNameOrEmail(subject, subject);
                 var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
