@@ -15,11 +15,9 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 
-<div class="flex px-4 my-1.5 justify-center lg:my-24">
+<div class="flex items-center justify-center px-4 my-1.5 md:h-screen lg:py-0">
 
-    <section class="relative overflow-x-auto shadow-md sm:rounded-lg max-w-screen-xl">
-
-
+    <section class="relative overflow-x-auto shadow-lg px-4 sm:rounded-lg max-w-screen-xl">
         <div class="flex justify-end">
             <form class="py-6 w-full sm:max-w-96" method="get" action="/perros">
                 <label for="default-search"
@@ -95,7 +93,7 @@
             </tr>
             </tbody>
 
-            <div class="relative overflow-x-auto shadow-md rounded-md py-4 mx-auto max-w-screen-lg"
+            <div class="relative overflow-x-auto rounded-md py-4 mx-auto max-w-screen-lg"
                  th:if="${perros.isEmpty()}">
                 <p class="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     No hay perros registrados
@@ -294,6 +292,7 @@
             </div>
         </div>
 
+
     </section>
 </div>
 <div th:replace="~{fragments/footer :: footer}"></div>
@@ -331,6 +330,7 @@
         });
     });
 </script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Show the loading spinner
